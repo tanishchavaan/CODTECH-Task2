@@ -1,0 +1,103 @@
+- 1. Create Departments Table
+CREATE TABLE Department (
+    department_id INT PRIMARY KEY AUTO_INCREMENT,
+    department_name VARCHAR(100),
+    location VARCHAR(100)
+);
+
+-- 2. Create JobPositions Table
+CREATE TABLE JobPositions (
+    job_id INT PRIMARY KEY AUTO_INCREMENT,
+    job_title VARCHAR(100),
+    min_salary DECIMAL(10, 2),
+    max_salary DECIMAL(10, 2)
+);
+
+-- 3. Create Employees Table
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    birth_date DATE,
+    hire_date DATE,
+    email VARCHAR(100),
+    phone VARCHAR(15),
+    department_id INT,
+    job_id INT,
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id),
+    FOREIGN KEY (job_id) REFERENCES JobPositions(job_id)
+);
+
+-- 4. Create Salaries Table
+CREATE TABLE Salaries (
+    salary_id INT PRIMARY KEY AUTO_INCREMENT,
+    employee_id INT,
+    salary DECIMAL(10, 2),
+    salary_date DATE,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+
+-- 5. Insert Sample Data into Departments Table
+INSERT INTO Department (department_name, location)
+VALUES
+('Human Resources', 'New York'),
+('Finance', 'San Francisco'),
+('Engineering', 'Boston');
+
+-- 6. Insert Sample Data into JobPositions Table
+INSERT INTO JobPositions (job_title, min_salary, max_salary)
+VALUES
+('HR Manager', 50000.00, 90000.00),
+('Finance Analyst', 60000.00, 100000.00),
+('Software Engineer', 70000.00, 120000.00);
+
+-- 7. Insert Sample Data into Employees Table
+INSERT INTO Employees (first_name, last_name, birth_date, hire_date, email, phone, department_id, job_id)
+VALUES
+('John', 'Doe', '1985-06-15', '2010-04-01', 'john.doe@example.com', '123-456-7890', 1, 1),
+('Jane', 'Smith', '1990-08-22', '2015-08-15', 'jane.smith@example.com', '987-654-3210', 2, 2),
+('Alice', 'Johnson', '1992-01-10', '2018-01-10', 'alice.johnson@example.com', '456-789-1230', 3, 3);
+
+-- 8. Insert Sample Data into Salaries Table
+INSERT INTO Salaries (employee_id, salary, salary_date)
+VALUES
+(1, 75000.00, '2023-01-01'),
+(2, 85000.00, '2023-01-01'),
+(3, 95000.00, '2023-01-01');
+
+-- 9. Retrieve All Employees with Their Job Positions and Departments
+SELECT 
+    Employees.first_name, 
+    Employees.last_name, 
+    JobPositions.job_title, 
+    Department.department_name
+FROM 
+    Employees
+JOIN 
+    JobPositions ON Employees.job_id = JobPositions.job_id
+JOIN 
+    Department ON Employees.department_id = Department.department_id;
+
+-- 10. Retrieve Employees with Their Salaries
+SELECT 
+    Employees.first_name, 
+    Employees.last_name, 
+    Salaries.salary, 
+    Salaries.salary_date
+FROM 
+    Salaries
+JOIN 
+    Employees ON Salaries.employee_id = Employees.employee_id;
+
+-- 11. Retrieve Employees and Their Department Locations
+SELECT 
+    Employees.first_name, 
+    Employees.last_name, 
+    Department.department_name, 
+    Department.location
+FROM 
+    Employees
+JOIN 
+    Department ON Employees.department_id = Department.department_id;
+
+--
